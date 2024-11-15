@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.MockMvcBuilder.*; // Untuk builder MockMVC
@@ -16,36 +14,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FormControllerTest {
-
+public class HeaderControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void formHello() throws Exception {
+    void headerOk() throws Exception {
         mockMvc.perform(
-                post("/form/hello")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED) // sebenernya bisa dihapus, karean tidak disebutkan consumes nya
-                        .param("name","Rafi")
+                get("/header/token")
+                        .header("X-TOKEN","RAFI")
         ).andExpectAll(
                 status().isOk(),
-                header().string(HttpHeaders.CONTENT_TYPE, Matchers.containsString(MediaType.TEXT_HTML_VALUE)),
-                content().string(Matchers.containsString("Hello Rafi"))
+                content().string(Matchers.containsString("OK"))
         );
     }
 
     @Test
-    void formCreatePerson() throws Exception {
+    void headerError() throws Exception {
         mockMvc.perform(
-                post("/form/person")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("name","Rafi")
-                        .param("birthDate","22/11/1998")
-                        .param("address","Jakarta")
+                get("/header/token")
+                        .header("X-TOKEN","SALAH")
         ).andExpectAll(
                 status().isOk(),
-                content().string(Matchers.containsString("Success create person with name: Rafi" +
-                        ", birthDate: 22/11/1998" + ", address: Jakarta"))
+                content().string(Matchers.containsString("ERROR"))
         );
     }
 }

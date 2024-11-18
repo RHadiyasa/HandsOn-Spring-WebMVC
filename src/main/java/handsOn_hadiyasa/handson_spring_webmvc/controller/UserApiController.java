@@ -2,6 +2,7 @@ package handsOn_hadiyasa.handson_spring_webmvc.controller;
 
 import handsOn_hadiyasa.handson_spring_webmvc.model.request.CreateUserRequest;
 import handsOn_hadiyasa.handson_spring_webmvc.model.response.CreateUserResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class UserApiController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserRequest createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public CreateUserRequest createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
         return createUserRequest;
     }
 
@@ -30,7 +31,7 @@ public class UserApiController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserResponse createUserResponse(@RequestBody CreateUserRequest createUserRequest) {
+    public CreateUserResponse createUserResponse(@RequestBody @Valid CreateUserRequest createUserRequest) {
         CreateUserResponse userResponse = new CreateUserResponse();
         userResponse.setFirstName(createUserRequest.getFirstName());
         userResponse.setLastName(createUserRequest.getLastName());

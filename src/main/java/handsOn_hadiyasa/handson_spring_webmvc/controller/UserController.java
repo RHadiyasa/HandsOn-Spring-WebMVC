@@ -1,13 +1,11 @@
 package handsOn_hadiyasa.handson_spring_webmvc.controller;
 
+import handsOn_hadiyasa.handson_spring_webmvc.entity.LoggedInUser;
 import handsOn_hadiyasa.handson_spring_webmvc.model.request.CreateUserRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -39,5 +37,14 @@ public class UserController {
                         .toList())
                 .append(" | Hobbies : ").append(userRequest.getHobbies().stream().toList())
                 .toString();
+    }
+
+    @GetMapping(path = "/user/current")
+    @ResponseBody
+    public String getCurrentUser(@SessionAttribute(name = "username") LoggedInUser loggedInUser) {
+        if (loggedInUser == null) {
+            return "Current user is null";
+        }
+        return "LoggedIn User as " + loggedInUser.getUsername();
     }
 }

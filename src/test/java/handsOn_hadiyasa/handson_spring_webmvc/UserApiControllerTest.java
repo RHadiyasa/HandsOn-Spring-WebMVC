@@ -75,7 +75,33 @@ public class UserApiControllerTest {
                         .content(jsonFormat)
         ).andExpectAll(
                 status().isBadRequest(),
-                content().string(Matchers.containsString("Validation Error"))
+                content().string(Matchers.containsString("Method argument is invalid"))
+        );
+
+        // cek isi json
+        System.out.println(jsonFormat);
+    }
+
+    @Test
+    void createUserErrorBinding() throws Exception {
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.setFirstName("Rafi");
+        createUserRequest.setLastName("Hadiyasa");
+        createUserRequest.setHobbies(List.of("Coding","Reading"));
+        createUserRequest.setSocialMedia(new ArrayList<>());
+        createUserRequest.getSocialMedia().add(new CreateSocialMediaRequest("rhadiyasa","Instagram"));
+        createUserRequest.getSocialMedia().add(new CreateSocialMediaRequest("heisenberg","Twitter"));
+
+        String jsonFormat = objectMapper.writeValueAsString(createUserRequest);
+
+        mockMvc.perform(
+                post("/api/userResponse")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(jsonFormat)
+        ).andExpectAll(
+                status().isBadRequest(),
+                content().string(Matchers.containsString("Invalid Data"))
         );
 
         // cek isi json

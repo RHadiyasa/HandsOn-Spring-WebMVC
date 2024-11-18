@@ -1,10 +1,13 @@
 package handsOn_hadiyasa.handson_spring_webmvc.controller;
 
+import handsOn_hadiyasa.handson_spring_webmvc.entity.LoggedInUser;
 import handsOn_hadiyasa.handson_spring_webmvc.exception.CustomException;
 import handsOn_hadiyasa.handson_spring_webmvc.model.request.LoginRequest;
 import handsOn_hadiyasa.handson_spring_webmvc.model.response.LoginResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +31,21 @@ public class AuthController {
         }
     }
 
+    /** -------------------------------------- */
+
     @PostMapping(path = "/auth/v2/login",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(
             @RequestBody LoginRequest loginRequest,
-            HttpServletResponse httpServletResponse
+            HttpServletResponse httpServletResponse,
+            HttpServletRequest httpServletRequest
     ) {
         if ("rhadiyasa".equals(loginRequest.getUsername()) && "password".equals(loginRequest.getPassword())) {
+
+            HttpSession session = httpServletRequest.getSession(true);
+            session.setAttribute("username", new LoggedInUser(loginRequest.getUsername()));
+
             Cookie cookie = new Cookie("username", loginRequest.getUsername());
             cookie.setPath("/");
             httpServletResponse.addCookie(cookie);

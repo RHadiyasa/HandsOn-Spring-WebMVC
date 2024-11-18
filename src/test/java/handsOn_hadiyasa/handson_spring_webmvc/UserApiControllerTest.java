@@ -107,4 +107,13 @@ public class UserApiControllerTest {
         // cek isi json
         System.out.println(jsonFormat);
     }
+
+    @Test
+    void getUserInvalid() throws Exception {
+        mockMvc.perform(
+                get("/user/current")
+        ).andExpectAll(
+                status().is3xxRedirection()
+        );
+    }
 }
